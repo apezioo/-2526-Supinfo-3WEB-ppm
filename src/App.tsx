@@ -1,5 +1,4 @@
-import Header from "@/layout/Header";
-import Footer from "@/layout/Footer";
+import { Layout } from "@/layout/Layout";
 
 import { GameOfLifePage } from "@pages/GameOfLife";
 import { PokedexPage } from "@pages/Pokedex";
@@ -10,17 +9,17 @@ function App() {
   return (
     <Router>
       <main>
-        <Header />
         <div className="router">
           <Routes>
-            <Route path="/" element={<Navigate to="/pokedex" replace />} />
-            <Route path="/pokedex" element={<PokedexPage />} />
-            <Route path="/pokemon" element={<PokemonPage />} />
-            <Route path="/game-of-life" element={<GameOfLifePage />} />
-            <Route path="*" element={<div>404 Not Found</div>} />
+            <Route element={<Layout />}>
+              <Route path="/" element={<Navigate to="/pokedex" replace />} />
+              <Route path="/pokedex" element={<PokedexPage />} />
+              <Route path="/pokemon" element={<PokemonPage />} />
+              <Route path="/game-of-life" element={<GameOfLifePage />} />
+              <Route path="*" element={<div>404 Not Found</div>} />
+            </Route>
           </Routes>
         </div>
-        <Footer />
       </main>
     </Router>
   );
