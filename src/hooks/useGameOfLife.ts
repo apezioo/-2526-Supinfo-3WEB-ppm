@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const useGameOfLife = () => {
-  const [toto, setToto] = useState();
+  const [grid, setGrid] = "???";
 
-  return toto;
+  return {};
 };
