@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateGrid } from "../services/gameOfLife";
+import { generateGrid, nextGrid } from "@/services/gameOfLife";
 
 export const useGameOfLife = () => {
   const [grid, setGrid] = useState(generateGrid(10));

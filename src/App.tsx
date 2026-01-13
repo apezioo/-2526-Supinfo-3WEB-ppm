@@ -1,6 +1,6 @@
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
-import { useGameOfLife } from "./hooks/useGameOfLife";
+import { useGameOfLife } from "@/hooks/useGameOfLife";
 
 function App() {
   const { grid, config } = useGameOfLife();
