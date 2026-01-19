@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 
 const POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -19,6 +20,7 @@ export const PokedexPage = () => {
   const [count, setCount] = useState(null);
   const [search, setSearch] = useState("");
   const [urlToFetch, setUrlToFetch] = useState(POKEMON_API_URL);
+  const [searchdebounce] = useDebounce(search, 1000);
 
   useEffect(() => {
     const url = new URL(urlToFetch);
@@ -50,10 +52,10 @@ export const PokedexPage = () => {
       {limit === count && (
         <input type="text" name="search" id="search" value={search} onChange={(e) => setSearch(e.target.value)} />
       )}
-      {limit === count && search !== "" && (
+      {limit === count && searchdebounce !== "" && (
         <ul>
           {pokemons
-            .filter((pokemon: { name: string; url: string }) => pokemon.name.includes(search))
+            .filter((pokemon: { name: string; url: string }) => pokemon.name.includes(searchdebounce))
             .map((pokemon: { name: string; url: string }) => (
               <li key={pokemon.name}>{pokemon.name}</li>
             ))}
