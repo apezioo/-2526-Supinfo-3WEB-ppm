@@ -26,14 +26,21 @@ interface PokemonType {
 
 export const PokemonPage = () => {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { name } = useParams();
   useEffect(() => {
     fetchPokemons(`https://pokeapi.co/api/v2/pokemon/${name}`)
       .then((data) => {
         setPokemon(data);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setError("Failed to fetch pokemon");
+      });
   }, [name]);
+  if (error) {
+    return <p>{error}</p>;
+  }
   return pokemon ? (
     <>
       <h2>{pokemon.name}</h2>
