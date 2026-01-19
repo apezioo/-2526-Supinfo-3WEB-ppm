@@ -11,7 +11,7 @@ const routes = createBrowserRouter([
     Component: Layout,
     children: [
       { path: "/pokedex", Component: PokedexPage },
-      { path: "/pokemon", Component: PokemonPage },
+      { path: "/pokemon/:name", Component: PokemonPage },
       { path: "/game-of-life", Component: GameOfLifePage },
       { path: "*", Component: NotFoundPage },
     ],

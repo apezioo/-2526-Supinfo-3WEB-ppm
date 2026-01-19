@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router";
 import { useDebounce } from "use-debounce";
 
 const POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon";
@@ -57,14 +58,18 @@ export const PokedexPage = () => {
           {pokemons
             .filter((pokemon: { name: string; url: string }) => pokemon.name.includes(searchdebounce))
             .map((pokemon: { name: string; url: string }) => (
-              <li key={pokemon.name}>{pokemon.name}</li>
+              <li key={pokemon.name}>
+                <Link to={`/pokemon/${pokemon.name}`}>{pokemon.name}</Link>
+              </li>
             ))}
         </ul>
       )}
       {limit !== count && (
         <ul>
           {pokemons.map((pokemon: { name: string; url: string }) => (
-            <li key={pokemon.name}>{pokemon.name}</li>
+            <li key={pokemon.name}>
+              <Link to={`/pokemon/${pokemon.name}`}>{pokemon.name}</Link>
+            </li>
           ))}
         </ul>
       )}
