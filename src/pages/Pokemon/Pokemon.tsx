@@ -46,8 +46,13 @@ export const PokemonPage = () => {
     <>
       <h2>{pokemon.name}</h2>
       <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-      {pokemon.types &&
-        pokemon.types.map((typeInfo: PokemonType) => <span key={typeInfo.type.name}>{typeInfo.type.name} </span>)}
+      <div>
+        <h3>Types</h3>
+        <ul>
+          {pokemon.types &&
+            pokemon.types.map((typeInfo: PokemonType) => <li key={typeInfo.type.name}>{typeInfo.type.name}</li>)}
+        </ul>
+      </div>
     </>
   ) : (
     <p>Loading...</p>
