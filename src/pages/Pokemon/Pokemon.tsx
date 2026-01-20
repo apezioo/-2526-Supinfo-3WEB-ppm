@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAtom } from "jotai";
+import { useQuery } from "@tanstack/react-query";
 import { userAtom } from "@/services/store";
 import { config } from "@/services/config";
 
-const fetchPokemons = async (urlToFetch: string) => {
-  const response = await fetch(urlToFetch);
+const fetchPokemon = async (name: string) => {
+  const response = await fetch(`${config.BASE_API_URL}/${name}`);
   if (response.ok) {
     const data = await response.json();
     return data;
   }
-  throw new Error("Failed to fetch pokemons");
+  throw new Error("Failed to fetch pokemon");
 };
 
 interface Pokemon {
@@ -28,23 +28,30 @@ interface PokemonType {
 }
 
 export const PokemonPage = () => {
-  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const { name } = useParams();
   const [user] = useAtom(userAtom);
-  useEffect(() => {
-    fetchPokemons(`${config.BASE_API_URL}/${name}`)
-      .then((data) => {
-        setPokemon(data);
-      })
-      .catch((error) => {
-        console.error(error);
-        setError("Failed to fetch pokemon");
-      });
-  }, [name]);
+
+  const {
+    data: pokemon,
+    isLoading,
+    error,
+  } = useQuery<Pokemon>({
+    queryKey: ["pokemon", name],
+    queryFn: () => fetchPokemon(name!),
+    enabled: !!name,
+  });
+
   if (error) {
-    return <p>{error}</p>;
+    return <p>Failed to fetch pokemon</p>;
   }
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return pokemon ? (
     <>
       <h2>
@@ -59,7 +66,5 @@ export const PokemonPage = () => {
         </ul>
       </div>
     </>
-  ) : (
-    <p>Loading...</p>
-  );
+  ) : null;
 };

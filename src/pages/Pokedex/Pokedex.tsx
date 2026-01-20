@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 import { useDebounce } from "use-debounce";
+import { useQuery } from "@tanstack/react-query";
 import { config } from "@/services/config";
 
-const fetchPokemons = async (urlToFetch: string) => {
-  const response = await fetch(urlToFetch);
+const fetchPokemons = async (urlToFetch: string, limit: number) => {
+  const url = new URL(urlToFetch);
+  url.searchParams.set("limit", limit.toString());
+  const response = await fetch(url.toString());
   if (response.ok) {
     const data = await response.json();
     return data;
@@ -13,27 +16,28 @@ const fetchPokemons = async (urlToFetch: string) => {
 };
 
 export const PokedexPage = () => {
-  const [pokemons, setPokemons] = useState([]);
-  const [next, setNext] = useState(null);
-  const [previous, setPrevious] = useState(null);
   const [limit, setLimit] = useState(20);
-  const [count, setCount] = useState(null);
   const [search, setSearch] = useState("");
   const [urlToFetch, setUrlToFetch] = useState(config.BASE_API_URL);
   const [searchdebounce] = useDebounce(search, 1000);
 
-  useEffect(() => {
-    const url = new URL(urlToFetch);
-    url.searchParams.set("limit", limit.toString());
-    fetchPokemons(url.toString())
-      .then((data) => {
-        setNext(data.next);
-        setCount(data.count);
-        setPrevious(data.previous);
-        setPokemons(data.results);
-      })
-      .catch((error) => console.error(error));
-  }, [urlToFetch, limit]);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["pokemons", urlToFetch, limit],
+    queryFn: () => fetchPokemons(urlToFetch, limit),
+  });
+
+  const pokemons = data?.results || [];
+  const next = data?.next || null;
+  const previous = data?.previous || null;
+  const count = data?.count || null;
+
+  if (error) {
+    return <p>Erreur lors du chargement des pokémons</p>;
+  }
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>
