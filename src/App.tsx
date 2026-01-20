@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import { RouterProvider } from "react-router";
 import { useAtom } from "jotai";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { userAtom } from "./services/store";
 import routes from "./routes";
+
+const queryClient = new QueryClient();
 
 function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,7 +22,12 @@ function App() {
     fetchUser();
   }, [setUser]);
 
-  return <RouterProvider router={routes} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <RouterProvider router={routes} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;
